@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+# Now let's echo a bunch of stuff
+
+# Single quoting effect with double exclamation point
+echo '!!:q'
+
+# Conditionals that may echo single quoted strings containing !
+[ a == a ] && echo '!!:q'
+[ a != a ] && echo '!!:q'
+[ a == a ] || echo '!!:q'
+[ a != a ] || echo '!!:q'
+[[ a == a ]] && echo '!!:q'
+[[ a != a ]] && echo '!!:q'
+[[ a == a ]] || echo '!!:q'
+[[ a != a ]] || echo '!!:q'
+if true; then echo '!!:q'; fi
+if false; then echo '!!:q'; fi
+while false; do echo '!!:q' && break; done
+while true; do echo '!!:q' && break; done
+until false; do echo '!!:q' && break; done
+until true; do echo '!!:q' && break; done
+case a in a) echo '!!:q'; esac
+case a in b) echo '!!:q'; esac
+case a in a) echo '!!:q';; esac
+case a in b) echo '!!:q';; esac
+case a in a) echo '!!:q';;& esac
+case a in b) echo '!!:q';;& esac
+
+# Now in comsubs
+echo $([ a == a ] && echo '!!:q')
+echo $([ a != a ] && echo '!!:q')
+echo $([ a == a ] || echo '!!:q')
+echo $([ a != a ] || echo '!!:q')
+echo $([[ a == a ]] && echo '!!:q')
+echo $([[ a != a ]] && echo '!!:q')
+echo $([[ a == a ]] || echo '!!:q')
+echo $([[ a != a ]] || echo '!!:q')
+echo $(if true; then echo '!!:q'; fi)
+echo $(if false; then echo '!!:q'; fi)
+echo $(while false; do echo '!!:q' && break; done)
+echo $(while true; do echo '!!:q' && break; done)
+echo $(until false; do echo '!!:q' && break; done)
+echo $(until true; do echo '!!:q' && break; done)
+echo $(case a in a) echo '!!:q'; esac)
+echo $(case a in b) echo '!!:q'; esac)
+echo $(case a in a) echo '!!:q';; esac)
+echo $(case a in b) echo '!!:q';; esac)
+echo $(case a in a) echo '!!:q';;& esac)
+echo $(case a in b) echo '!!:q';;& esac)
+
+# Now in quoted comsubs
+echo "$([ a == a ] && echo '!!:q')"
+echo "$([ a != a ] && echo '!!:q')"
+echo "$([ a == a ] || echo '!!:q')"
+echo "$([ a != a ] || echo '!!:q')"
+echo "$([[ a == a ]] && echo '!!:q')"
+echo "$([[ a != a ]] && echo '!!:q')"
+echo "$([[ a == a ]] || echo '!!:q')"
+echo "$([[ a != a ]] || echo '!!:q')"
+echo "$(if true; then echo '!!:q'; fi)"
+echo "$(if false; then echo '!!:q'; fi)"
+echo "$(while false; do echo '!!:q' && break; done)"
+echo "$(while true; do echo '!!:q' && break; done)"
+echo "$(until false; do echo '!!:q' && break; done)"
+echo "$(until true; do echo '!!:q' && break; done)"
+echo "============================================"
+echo "$(case a in a) echo '!!:q'; esac)"
+echo "$(case a in b) echo '!!:q'; esac)"
+echo "$(case a in a) echo '!!:q';; esac)"
+echo "$(case a in b) echo '!!:q';; esac)"
+echo "$(case a in a) echo '!!:q';;& esac)"
+echo "$(case a in b) echo '!!:q';;& esac)"
+
+# This proves that it's specific to case statements inside COMSUB
+# while running in interactive mode, and is not a more general result
+# of us misusing '!' or having some shell feature enabled that causes
+# bash to behave differently in interactive mode. All the conditionals
+# above are fine except the case statements.
+

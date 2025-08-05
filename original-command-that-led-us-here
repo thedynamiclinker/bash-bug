@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+x=brick && case "$x" in *a*) echo 'haaay';; *e*) echo 'heeey...';; *i*) echo 'hiii!';; esac
+
+echo $(x=brick && case "$x" in *a*) echo 'haaay';; *e*) echo 'heeey...';; *i*) echo 'hiii!';; esac)
+
+echo "$(x=brick && case "$x" in *a*) echo 'haaay';; *e*) echo 'heeey...';; *i*) echo 'hiii!';; esac)"

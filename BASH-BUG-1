@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+
+# Double quoting effect
+echo "hi!"
+
+# Conditionals that may echo double quoted strings containing !
+[ a == a ] && echo "hi!"
+[ a != a ] && echo "hi!"
+[ a == a ] || echo "hi!"
+[ a != a ] || echo "hi!"
+[[ a == a ]] && echo "hi!"
+[[ a != a ]] && echo "hi!"
+[[ a == a ]] || echo "hi!"
+[[ a != a ]] || echo "hi!"
+if true; then echo "hi!"; fi
+if false; then echo "hi!"; fi
+while false; do echo "hi!" && break; done
+while true; do echo "hi!" && break; done
+until false; do echo "hi!" && break; done
+until true; do echo "hi!" && break; done
+case a in a) echo "hi!"; esac
+case a in b) echo "hi!"; esac
+case a in a) echo "hi!";; esac
+case a in b) echo "hi!";; esac
+case a in a) echo "hi!";;& esac
+case a in b) echo "hi!";;& esac
+
+# Now in comsubs
+echo $([ a == a ] && echo "hi!")
+echo $([ a != a ] && echo "hi!")
+echo $([ a == a ] || echo "hi!")
+echo $([ a != a ] || echo "hi!")
+echo $([[ a == a ]] && echo "hi!")
+echo $([[ a != a ]] && echo "hi!")
+echo $([[ a == a ]] || echo "hi!")
+echo $([[ a != a ]] || echo "hi!")
+echo $(if true; then echo "hi!"; fi)
+echo $(if false; then echo "hi!"; fi)
+echo $(while false; do echo "hi!" && break; done)
+echo $(while true; do echo "hi!" && break; done)
+echo $(until false; do echo "hi!" && break; done)
+echo $(until true; do echo "hi!" && break; done)
+echo $(case a in a) echo "hi!"; esac)
+echo $(case a in b) echo "hi!"; esac)
+echo $(case a in a) echo "hi!";; esac)
+echo $(case a in b) echo "hi!";; esac)
+echo $(case a in a) echo "hi!";;& esac)
+echo $(case a in b) echo "hi!";;& esac)
+
+# Now in quoted comsubs
+echo "$([ a == a ] && echo "hi!")"
+echo "$([ a != a ] && echo "hi!")"
+echo "$([ a == a ] || echo "hi!")"
+echo "$([ a != a ] || echo "hi!")"
+echo "$([[ a == a ]] && echo "hi!")"
+echo "$([[ a != a ]] && echo "hi!")"
+echo "$([[ a == a ]] || echo "hi!")"
+echo "$([[ a != a ]] || echo "hi!")"
+echo "$(if true; then echo "hi!"; fi)"
+echo "$(if false; then echo "hi!"; fi)"
+echo "$(while false; do echo "hi!" && break; done)"
+echo "$(while true; do echo "hi!" && break; done)"
+echo "$(until false; do echo "hi!" && break; done)"
+echo "$(until true; do echo "hi!" && break; done)"
+echo "$(case a in a) echo "hi!"; esac)"
+echo "$(case a in b) echo "hi!"; esac)"
+echo "$(case a in a) echo "hi!";; esac)"
+echo "$(case a in b) echo "hi!";; esac)"
+echo "$(case a in a) echo "hi!";;& esac)"
+echo "$(case a in b) echo "hi!";;& esac)"
+
+#"      # This line is needed to whack gtk syntax highlighting back to sanity
+
+# This proves that it's specific to case statements inside COMSUB
+# while running in interactive mode, and is not a more general result
+# of us misusing "!" or having some shell feature enabled that causes
+# bash to behave differently in interactive mode. All the conditionals
+# above are fine except the case statements.
+
+# 
+

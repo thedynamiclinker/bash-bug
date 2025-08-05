@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# rm -f ~/.bash_history && history -c
+# env -i PATH="$PATH" TERM="$TERM" bash --norc --noprofile
+# bash -i BASH-BUG-GOOD-0
+# bash -i BASH-BUG-GOOD-1
+# bash -i BASH-BUG-GOOD-2
+# bash -i BASH-BUG-GOOD-3
+
+sudo cat /etc/shadow > /dev/null
