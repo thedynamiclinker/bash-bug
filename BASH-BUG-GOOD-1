@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-# This file echos single quoted strings under impossible conditions
-
-echo "$(case a in b) echo '!sudo:-2';; esac)"
-

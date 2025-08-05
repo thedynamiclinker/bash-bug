@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Original command sequence that led us to realize there was a bug
+
 x=brick && case "$x" in *a*) echo 'haaay';; *e*) echo 'heeey...';; *i*) echo 'hiii!';; esac
 
 echo $(x=brick && case "$x" in *a*) echo 'haaay';; *e*) echo 'heeey...';; *i*) echo 'hiii!';; esac)

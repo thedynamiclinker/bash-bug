@@ -1,0 +1,20 @@
+#!/usr/bin/env -S bash -i
+
+# Example of how the bash 'events' system works in interactive mode.
+# This isn't the bug, but the bug is related to the events syntax
+# being parsed in interactive mode specifically within double-quoted
+# command substitutions containing a case statement, while the events
+# (aka history) syntax is *not* parsed in the same context within any
+# other kind of conditional (e.g., if, a && b, a || b) or other type
+# of statement that involves a conditional (e.g., for, while, until).
+# As such, the following example is at least related to what we're
+# dealing with, though it's not necessarily the kind of vulnerability
+# you might think at first from running this file and then realizing
+# it's exactly *this* syntax that's being expanded when it shouldn't.
+#
+# Tl;dr: It's at least a bug. No evidence yet that it's a vulnerability.
+
+sudo cat /etc/passwd >/dev/null
+ls
+cowsay boop
+!sudo:0 -s
