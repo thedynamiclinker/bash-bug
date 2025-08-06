@@ -15,9 +15,9 @@
 # (2) in comsub
 # (3) in double quoted comsub
 echo "BLOCK 1: No errors"
-echo 'hi1!'
-echo $(echo 'hi2!')
-echo "$(echo 'hi3!')"
+echo 'hi!'
+echo $(echo 'hi!')
+echo "$(echo 'hi!')"
 echo
 
 # now consider the following more complex echo of a single quoted string with an exclamation point in it:
@@ -25,38 +25,38 @@ echo
 # (2) in comsub
 # (3) in double quoted comsub
 echo "BLOCK 2: Error on the third command"
-case a in a) echo 'hi1!';; esac
-echo $(case a in a) echo 'hi2!';; esac)
-echo "$(case a in a) echo 'hi3!';; esac)"
+case a in a) echo 'hi!';; esac
+echo $(case a in a) echo 'hi!';; esac)
+echo "$(case a in a) echo 'hi!';; esac)"
 echo
 
 # the error occurs even if the string in question is not echoed
 # but only when the comsub is quoted, and only when bash is running
 # interactively
 echo "BLOCK 3: Error even when not echoing the problematic string"
-case a in b) echo 'hi1!';; esac
-echo $(case a in b) echo 'hi2!';; esac)
-echo "$(case a in b) echo 'hi3!';; esac)"
+case a in b) echo 'hi!';; esac
+echo $(case a in b) echo 'hi!';; esac)
+echo "$(case a in b) echo 'hi!';; esac)"
 echo
 
 
 # Here are the same six commands when 'hi!' is not quoted
 echo "BLOCK 4: No errors when the inner string is unquoted"
-case a in a) echo hi1!;; esac
-echo $(case a in a) echo hi2!;; esac)
-echo "$(case a in a) echo hi3!;; esac)"
-case a in b) echo hi4!;; esac
-echo $(case a in b) echo hi5!;; esac)
-echo "$(case a in b) echo hi6!;; esac)"
+case a in a) echo hi!;; esac
+echo $(case a in a) echo hi!;; esac)
+echo "$(case a in a) echo hi!;; esac)"
+case a in b) echo hi!;; esac
+echo $(case a in b) echo hi!;; esac)
+echo "$(case a in b) echo hi!;; esac)"
 echo
 
 echo "BLOCK 5: We get a different error when the inner string is double quoted"
-case a in a) echo "hi1!";; esac
+case a in a) echo "hi!";; esac
 echo $(case a in a) echo "hi2!";; esac)
-echo "$(case a in a) echo "hi3!";; esac)"
-case a in b) echo "hi4!";; esac
-echo $(case a in b) echo "hi5!";; esac)
-echo "$(case a in b) echo "hi6!";; esac)"
+echo "$(case a in a) echo "hi!";; esac)"
+case a in b) echo "hi!";; esac
+echo $(case a in b) echo "hi!";; esac)
+echo "$(case a in b) echo "hi!";; esac)"
 echo
 
 echo "BLOCK 6: What if the exclamation point isn't at the end?"
