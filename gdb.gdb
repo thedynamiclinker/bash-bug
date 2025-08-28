@@ -1,16 +1,12 @@
 # =========
 # gdb.gdb
 # =========
-set confirm off
 set pagination off
 set print pretty on
 set print frame-arguments all
-set print elements 0
-set breakpoint pending on
-
-# stay in the parsing parent; detach from children to cut noise
-set follow-fork-mode child
+set follow-fork-mode parent
 set detach-on-fork on
+layout src
 
 # init guard for watchpoints file
 set $dl_wp_enabled = 0
@@ -18,14 +14,18 @@ set $dl_wp_enabled = 0
 # --- Prove we’re taking the history path (like your simple script) ---
 
 # Stop right where the error is reported
-tbreak hist_error
+break lib/readline/histexpand.c:388
 commands
-  silent
-  printf "\n== HIT hist_error ==\n"
-  bt 20
-  # arm phase 2 after this first hit
-  source gdb-watchpoints.gdb
-  continue
+    silent
+    backtrace
+    return
+    return
+    return
+    return
+    printf "\n== HIT hist_error ==\n"
+    # arm phase 2 after this first hit
+    source gdb-watchpoints.gdb
+    #continue
 end
 
 # Also stop at start of history expansion to see the input + qc
