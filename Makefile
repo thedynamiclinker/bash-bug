@@ -15,9 +15,9 @@ debug:
 	gdb -q -x gdb.gdb bash/bash
 
 good:
-	gdb -q -x gdb.gdb bash/bash -ex "run -i ./good.sh"
+	gdb -q -x gdb.gdb bash/bash -ex "run -i ./good.sh" -ex "quit"
 
 bad:
-	gdb -q -x gdb.gdb bash/bash -ex "run -i ./bad.sh"
+	gdb -q -x gdb.gdb bash/bash -ex "run -i ./bad.sh" -ex "quit"
 
 .PHONY: default configure build good bad run
