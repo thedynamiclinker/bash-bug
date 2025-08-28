@@ -18,30 +18,20 @@ set $dl_wp_enabled = 0
 set $dl_reran = 0
 
 # ---- helpers ---------------------------------------------------------
-
 define dl_print_ctx
-  # $arg0 = base char* (the real line buffer)
-  # $arg1 = start index (int)
-  # $arg2 = current index (int)
-  # $arg3 = radius (int, optional; default 16)
   set $dl_base = (const char*)$arg0
   set $dl_st   = (int)$arg1
   set $dl_cur  = (int)$arg2
   set $dl_rad  = ($argc >= 4) ? (int)$arg3 : 16
+
   if $dl_base == 0
     printf "context: <null base>\n"
   else
     set $dl_lo = ($dl_st > $dl_rad) ? $dl_st - $dl_rad : 0
-    set $dl_hi = $dl_cur + $dl_rad
-    set $dl_len = $dl_hi - $dl_lo
-    if $dl_len < 0
-      set $dl_len = 0
-    end
     printf "start=%d current=%d\n", $dl_st, $dl_cur
     printf "context: "
-    # GDB printf supports precision; this bounds the slice
-    printf "%.*s", $dl_len, $dl_base + $dl_lo
-    printf "\n"
+    # gdb has no "%.*s", so just show 40 chars max
+    printf "%.40s\n", $dl_base + $dl_lo
   end
 end
 
