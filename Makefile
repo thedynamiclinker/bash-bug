@@ -1,3 +1,5 @@
+default: build
+
 configure:
 	pushd bash && ./configure && popd
 
