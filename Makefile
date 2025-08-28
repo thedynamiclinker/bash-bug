@@ -12,19 +12,13 @@ clean:
 	pushd bash && make clean && popd
 
 debug:
-	gdb -q -x histbug.gdb bash/bash
+	gdb -q -x gdb.gdb bash/bash -ex "run -i ./bad.sh"
 
 good:
-	gdb -q -x histbug.gdb bash/bash -ex "run -i ./good.sh"
-
-bad:
-	gdb -q -x histbug.gdb bash/bash -ex "run -i ./bad.sh"
-
-run-good:
 	echo "Running good code"
 	bash/bash -i good.sh
 
-run-bad:
+bad:
 	echo "Running bad code"
 	bash/bash -i bad.sh
 
