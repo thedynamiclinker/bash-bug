@@ -36,16 +36,15 @@ define dl_print_ctx
 end
 
 # ---- capture the true history input buffer early ---------------------
-
 tbreak history_expand_internal
 commands
   silent
   printf "\n-- history_expand_internal --\n"
   printf "string=%.160s\n", string
-  # Capture the real input line for later 'hist_error' use
   set $dl_line = string
-  set $dl_qc = qc
-  printf "qc as char: '%c'\n", (char)$dl_qc
+  printf "qc (start) = %d '%c'\n", qc, (char)qc
+  printf "history_quoting_state (start) = %d\n", history_quoting_state
+  show_ds
   continue
 end
 
@@ -59,25 +58,13 @@ commands
 end
 
 # ---- error hook: show correct context from the real line --------------
-
 tbreak hist_error
 commands
   silent
   printf "\n== HIT hist_error ==\n"
-  # 'start'/'current' are indices in the history scanning buffer,
-  # so print context around those indices using the captured real line.
   dl_print_ctx $dl_line start current 16
-  bt 12
-
-  # Arm watchpoints only once and optionally re-run to catch early writes
-  if $dl_wp_enabled == 0
-    source gdb-watchpoints.gdb
-    set $dl_wp_enabled = 1
-    if $dl_reran == 0
-      set $dl_reran = 1
-      run
-    end
-  end
+  printf "history_quoting_state (at error) = %d\n", history_quoting_state
+  show_ds
+  bt 8
   continue
 end
-
