@@ -1,10 +1,15 @@
+CFLAGS := "-O0 -g3 -ggdb -fno-omit-frame-pointer -fno-inline"
+
 default: build
 
 configure:
-	pushd bash && ./configure && popd
+	pushd bash && CFLAGS=$(CFLAGS) ./configure && popd
 
 build:
-	pushd bash && make -j $$(nproc) && popd
+	pushd bash && make -j $$(nproc) CFLAGS=$(CFLAGS) && popd
+
+clean:
+	pushd bash && make clean && popd
 
 good:
 	gdb -q -x histbug.gdb ./bash -ex "run -i ./good.sh" -ex "quit"
