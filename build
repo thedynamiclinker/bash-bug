@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+export CFLAGS='-O0 -g3 -ggdb -fno-omit-frame-pointer -fno-inline'
+
+pushd ..
+./configure
+make -j$(nproc)
+popd

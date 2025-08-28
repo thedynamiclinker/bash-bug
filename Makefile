@@ -1,15 +1,17 @@
-EXAMPLES := 0-intuition 1-inner-double 2-inner-single 3-inner-single
+configure:
+	pushd bash && ./configure && popd
 
-control:
-	sh 	  $(EXAMPLES)
-	sh -i $(EXAMPLES)
-	bash  $(EXAMPLES)
+build:
+	pushd bash && make -j $$(nproc) && popd
 
-bashbug:
-	bash -i $(EXAMPLES)
+good:
+	gdb -q -x histbug.gdb ./bash -ex "run -i ./good.sh" -ex "quit"
 
-root-shell:
-	./4-curious
+bad:
+	gdb -q -x histbug.gdb ./bash -ex "run -i ./bad.sh" -ex "quit"
 
-env:
-	env -i PATH="$$PATH" TERM="$$TERM" bash --norc --noprofile -i
+run:
+	echo "Running good code"
+	bash/bash -i good.sh
+	echo "Running bad code"
+	bash/bash -i bad.sh
