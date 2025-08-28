@@ -1,1 +1,1 @@
-echo "$(if false; then echo 'hi!'; fi)"
+builtin echo "$(if false; then echo 'hi!'; fi)"

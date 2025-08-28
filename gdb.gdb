@@ -6,7 +6,7 @@ set print pretty on
 set print frame-arguments all
 set follow-fork-mode parent
 set detach-on-fork on
-layout src
+#layout src
 
 # init guard for watchpoints file
 set $dl_wp_enabled = 0
