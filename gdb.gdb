@@ -6,8 +6,8 @@ set pagination off
 set print pretty on
 set print frame-arguments all
 set print inferior-events off
-set follow-fork-mode parent
-set detach-on-fork on
+#set follow-fork-mode parent
+#set detach-on-fork on
 #layout src
 
 # init guard for watchpoints file
