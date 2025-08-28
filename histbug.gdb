@@ -28,5 +28,3 @@ commands
   printf "qc=%d ('%c')\n", qc, qc
   continue
 end
-
-quit
