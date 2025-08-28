@@ -1,11 +1,5 @@
 # gdb-watchpoints.gdb
-# Enable once after first hist_error; do nothing on re-source.
-
-if $dl_wp_enabled == 0
-  set $dl_wp_enabled = 1
-  printf "\n(Enabling delimiter-stack watchpoints)\n"
-
-  # helper: print delimiter stack (non-printables as \xNN)
+if $dl_wp_enabled == 1
   define show_ds
     set $depth = dstack.delimiter_depth
     printf "dstack.depth=%d ", $depth
@@ -28,7 +22,6 @@ if $dl_wp_enabled == 0
     end
   end
 
-  # snapshot right before history expansion (adjust line if needed)
   break parse.y:2661
   commands
     silent
@@ -49,7 +42,6 @@ if $dl_wp_enabled == 0
     continue
   end
 
-  # delimiter-depth changes = push/pop
   watch -l dstack.delimiter_depth
   commands
     silent
@@ -59,7 +51,6 @@ if $dl_wp_enabled == 0
     continue
   end
 
-  # first two slots are enough; avoid exhausting hw watchpoints
   watch -l ((unsigned char*)dstack.delimiters)[0]
   commands
     silent
@@ -75,6 +66,14 @@ if $dl_wp_enabled == 0
     printf "\n** dstack.delimiters[1] write **\n"
     show_ds
     bt 4
+    continue
+  end
+
+  watch -l history_quoting_state
+  commands
+    silent
+    printf "\n** history_quoting_state -> %d **\n", history_quoting_state
+    bt 3
     continue
   end
 end
