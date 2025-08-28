@@ -1,9 +1,11 @@
 # =========
 # gdb.gdb
 # =========
+set confirm off
 set pagination off
 set print pretty on
 set print frame-arguments all
+set print inferior-events off
 set follow-fork-mode parent
 set detach-on-fork on
 #layout src
