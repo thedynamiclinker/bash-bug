@@ -12,14 +12,12 @@ clean:
 	pushd bash && make clean && popd
 
 debug:
-	gdb -q -x gdb.gdb bash/bash -ex "run -i ./bad.sh"
+	gdb -q -x gdb.gdb bash/bash
 
 good:
-	echo "Running good code"
-	bash/bash -i good.sh
+	gdb -q -x gdb.gdb bash/bash -ex "run -i ./good.sh"
 
 bad:
-	echo "Running bad code"
-	bash/bash -i bad.sh
+	gdb -q -x gdb.gdb bash/bash -ex "run -i ./bad.sh"
 
 .PHONY: default configure build good bad run
