@@ -11,13 +11,13 @@ build:
 clean:
 	pushd bash && make clean && popd
 
-debug:
-	gdb -q -x gdb.gdb bash/bash
-
 good:
-	gdb -q -x gdb.gdb bash/bash -ex "run -i ./good.sh" -ex "quit"
+	gdb -q -x gdb.gdb bash/bash -ex "run -i ./good.sh"
 
 bad:
-	gdb -q -x gdb.gdb bash/bash -ex "run -i ./bad.sh" -ex "quit"
+	gdb -q -x gdb.gdb bash/bash -ex "run -i ./bad.sh"
 
-.PHONY: default configure build good bad run
+simple:
+	gdb -q -x gdb-simple.gdb bash/bash -ex "run -i ./bad.sh"
+
+.PHONY: default configure build good bad simple

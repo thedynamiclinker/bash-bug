@@ -109,3 +109,12 @@ commands
   continue
 end
 
+break lib/readline/histexpand.c:388
+commands
+    silent
+    backtrace
+    return
+    return
+    return
+    return
+end
