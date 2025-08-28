@@ -1,20 +1,20 @@
 # gdb-watchpoints.gdb
 if $dl_wp_enabled == 1
   define show_ds
-    set $depth = dstack.delimiter_depth
-    printf "dstack.depth=%d ", $depth
-    if ($depth > 0)
-      set $top = ((unsigned char*)dstack.delimiters)[$depth-1]
-      printf "top='%c' stack=\"", (char)$top
-      set $i = 0
-      while ($i < $depth)
-        set $ch = ((unsigned char*)dstack.delimiters)[$i]
-        if ($ch >= 32 && $ch < 127)
-          printf "%c", (char)$ch
+    set $dl_depth = dstack.delimiter_depth
+    printf "dstack.depth=%d ", $dl_depth
+    if ($dl_depth > 0)
+      set $dl_top = ((unsigned char*)dstack.delimiters)[$dl_depth-1]
+      printf "top='%c' stack=\"", (char)$dl_top
+      set $dl_i = 0
+      while ($dl_i < $dl_depth)
+        set $dl_ch = ((unsigned char*)dstack.delimiters)[$dl_i]
+        if ($dl_ch >= 32 && $dl_ch < 127)
+          printf "%c", (char)$dl_ch
         else
-          printf "\\x%02x", $ch
+          printf "\\x%02x", $dl_ch
         end
-        set $i = $i + 1
+        set $dl_i = $dl_i + 1
       end
       printf "\"\n"
     else
@@ -38,7 +38,7 @@ if $dl_wp_enabled == 1
     p bash_input.type
     p bash_input.location
     show_ds
-    bt 6
+    bt 5
     continue
   end
 
@@ -47,7 +47,7 @@ if $dl_wp_enabled == 1
     silent
     printf "\n** dstack.delimiter_depth -> %d **\n", dstack.delimiter_depth
     show_ds
-    bt 4
+    bt 3
     continue
   end
 
@@ -56,7 +56,7 @@ if $dl_wp_enabled == 1
     silent
     printf "\n** dstack.delimiters[0] write **\n"
     show_ds
-    bt 4
+    bt 3
     continue
   end
 
@@ -65,7 +65,7 @@ if $dl_wp_enabled == 1
     silent
     printf "\n** dstack.delimiters[1] write **\n"
     show_ds
-    bt 4
+    bt 3
     continue
   end
 
@@ -73,7 +73,7 @@ if $dl_wp_enabled == 1
   commands
     silent
     printf "\n** history_quoting_state -> %d **\n", history_quoting_state
-    bt 3
+    bt 2
     continue
   end
 end
