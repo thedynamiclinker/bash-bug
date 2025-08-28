@@ -1,27 +1,28 @@
-# gdb-watchpoints.gdb
-if $dl_wp_enabled == 1
-  define show_ds
-    set $dl_depth = dstack.delimiter_depth
-    printf "dstack.depth=%d ", $dl_depth
-    if ($dl_depth > 0)
-      set $dl_top = ((unsigned char*)dstack.delimiters)[$dl_depth-1]
-      printf "top='%c' stack=\"", (char)$dl_top
-      set $dl_i = 0
-      while ($dl_i < $dl_depth)
-        set $dl_ch = ((unsigned char*)dstack.delimiters)[$dl_i]
-        if ($dl_ch >= 32 && $dl_ch < 127)
-          printf "%c", (char)$dl_ch
-        else
-          printf "\\x%02x", $dl_ch
-        end
-        set $dl_i = $dl_i + 1
+# Always define the helper so we can call it anytime
+define show_ds
+  set $dl_depth = dstack.delimiter_depth
+  printf "dstack.depth=%d ", $dl_depth
+  if ($dl_depth > 0)
+    set $dl_top = ((unsigned char*)dstack.delimiters)[$dl_depth-1]
+    printf "top='%c' stack=\"", (char)$dl_top
+    set $dl_i = 0
+    while ($dl_i < $dl_depth)
+      set $dl_ch = ((unsigned char*)dstack.delimiters)[$dl_i]
+      if ($dl_ch >= 32 && $dl_ch < 127)
+        printf "%c", (char)$dl_ch
+      else
+        printf "\\x%02x", $dl_ch
       end
-      printf "\"\n"
-    else
-      printf "top=<none>\n"
+      set $dl_i = $dl_i + 1
     end
+    printf "\"\n"
+  else
+    printf "top=<none>\n"
   end
+end
 
+# Only set breakpoints/watchpoints when enabled
+if $dl_wp_enabled == 1
   break parse.y:2661
   commands
     silent
