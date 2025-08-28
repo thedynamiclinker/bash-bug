@@ -17,3 +17,5 @@ run:
 	bash/bash -i good.sh
 	echo "Running bad code"
 	bash/bash -i bad.sh
+
+.PHONY: default configure build good bad run
