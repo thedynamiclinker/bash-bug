@@ -10,8 +10,10 @@ layout src
 
 break lib/readline/histexpand.c:388
 commands
-  silent
-  backtrace
-  return
-  return
+    silent
+    backtrace
+    return
+    return
+    return
+    return
 end
