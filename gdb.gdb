@@ -1,7 +1,6 @@
 # =========
 # gdb.gdb
 # =========
-
 set confirm off
 set pagination off
 set print pretty on
@@ -9,19 +8,26 @@ set print frame-arguments all
 set print elements 0
 set breakpoint pending on
 
-# Optional (fork noise control). If you want to follow the child shell:
+# Follow the child; keeps forks under control
 set follow-fork-mode child
 set detach-on-fork off
 set print thread-events off
 
-# --- helper: show the delimiter stack nicely
+# ---- helper: dump delimiter stack nicely (handles non-printables)
 define show_ds
-  printf "dstack.depth=%d ", dstack.delimiter_depth
-  if (dstack.delimiter_depth > 0)
-    printf "top='%c' stack=\""
+  set $depth = dstack.delimiter_depth
+  printf "dstack.depth=%d ", $depth
+  if ($depth > 0)
+    set $top = ((unsigned char*)dstack.delimiters)[$depth-1]
+    printf "top='%c' stack=\"", (char)$top
     set $i = 0
-    while $i < dstack.delimiter_depth
-      printf "%c", ((char*)dstack.delimiters)[$i]
+    while ($i < $depth)
+      set $ch = ((unsigned char*)dstack.delimiters)[$i]
+      if ($ch >= 32 && $ch < 127)
+        printf "%c", (char)$ch
+      else
+        printf "\\x%02x", $ch
+      end
       set $i = $i + 1
     end
     printf "\"\n"
@@ -30,10 +36,10 @@ define show_ds
   end
 end
 document show_ds
-  Print delimiter stack depth and content (top is depth-1).
+  Print delimiter stack depth and content (top is depth-1). Non-printables as \xNN.
 end
 
-# --- callsite right before history expansion (line may shift with version)
+# ---- stop right before history expansion (adjust line if it moves)
 break parse.y:2661
 commands
   silent
@@ -49,25 +55,23 @@ commands
   p lex_state
   p bash_input.type
   p bash_input.location
-  x/s dstack.delimiters
   show_ds
   bt 4
   continue
 end
 
-# --- when history expand actually runs
+# ---- when history expansion actually runs
 break history_expand_internal
 commands
   silent
   printf "\n-- history_expand_internal --\n"
-  printf "string=%.160s\n", string          # <== param is 'string', not 's'
+  printf "string=%.160s\n", string      # <-- param is 'string' in this tree
   p qc
   printf "qc as char: '%c'\n", (char)qc
   continue
 end
 
-# --- watch who mutates the delimiter state
-# depth changes (push/pop)
+# ---- watch who mutates the delimiter state
 watch -l dstack.delimiter_depth
 commands
   silent
@@ -77,9 +81,8 @@ commands
   continue
 end
 
-# writes to first few delimiter slots (enough to see pushes)
-# (Hardware watchpoints are limited; 3–4 is usually safe.)
-watch -l ((char*)dstack.delimiters)[0]
+# Watch first few slots; hardware watchpoints are limited, so 0..2 is plenty
+watch -l ((unsigned char*)dstack.delimiters)[0]
 commands
   silent
   printf "\n** dstack.delimiters[0] write **\n"
@@ -87,7 +90,8 @@ commands
   bt 3
   continue
 end
-watch -l ((char*)dstack.delimiters)[1]
+
+watch -l ((unsigned char*)dstack.delimiters)[1]
 commands
   silent
   printf "\n** dstack.delimiters[1] write **\n"
@@ -95,7 +99,8 @@ commands
   bt 3
   continue
 end
-watch -l ((char*)dstack.delimiters)[2]
+
+watch -l ((unsigned char*)dstack.delimiters)[2]
 commands
   silent
   printf "\n** dstack.delimiters[2] write **\n"
