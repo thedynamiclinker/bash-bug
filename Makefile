@@ -16,6 +16,9 @@ clean:
 	  $(MAKE) -C bash distclean || $(MAKE) -C bash clean; \
 	fi
 
+check:
+	bash/bash -i bad.sh
+
 good:
 	gdb -q -x gdb.gdb bash/bash -ex "run -i ./good.sh" -ex "quit"
 
